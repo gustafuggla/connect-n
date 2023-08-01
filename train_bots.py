@@ -1,6 +1,8 @@
 import pickle
 from connect_n_base import ConnectNBase
 from agent_q import AgentQ
+import utils
+
 
 bot_1 = AgentQ('Bot1')
 bot_2 = AgentQ('Bot2')
@@ -12,7 +14,7 @@ condition = 3
 game = ConnectNBase(bot_1, bot_2, n_rows, n_cols, condition)
 game.setup()
 
-for n in range(100000):
+for n in range(1000):
     if n % 1000 == 0:
             print(n)
     while True:
@@ -31,9 +33,6 @@ for n in range(100000):
             game.setup()
             break
 
-print(len(bot_1.q_table))
-print(len(bot_2.q_table))
-
-for bot in [bot_1, bot_2]:
-    with open(f'policies/{bot.name}_{n_rows}_{n_cols}_{condition}.pkl', 'wb') as f:
+for bot, bot_number in zip([bot_1, bot_2], [1, 2]):
+    with open(utils.get_policy_path(bot_number, n_rows, n_cols, condition), 'wb') as f:
         pickle.dump(bot.q_table, f)

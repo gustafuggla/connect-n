@@ -43,8 +43,7 @@ n_rows = 3
 n_cols = 4
 condition = 3
 
-with open(utils.get_policy_path(2, n_rows, n_cols, condition), 'rb') as f:
-    policy_2 = pickle.load(f)
+policy_2 = utils.load_policy(2, n_rows, n_cols, condition)
 
 bot = AgentQ('Bot', is_training=False, policy=policy_2, epsilon=1)
 
