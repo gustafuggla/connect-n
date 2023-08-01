@@ -27,18 +27,15 @@ class ConnectN(ConnectNGUI):
             self.game.check_win_condition()
         else:
             if self.game.winner is not None:
-                print(self.game.winner.name)
-            else:
-                print('Draw')
-            time.sleep(2)
-            self.setup()
+                self.highlight_winning_moves()
 
     def on_key_press(self, symbol: int, modifiers: int):
-        # KEY_1 = 49
         if (not self.game.game_over and
                 not self.game.active_player.is_bot and
-                (symbol - 49) in self.game.get_legal_moves()):
-            self.make_move(symbol - 49)
+                (symbol - arcade.key.KEY_1) in self.game.get_legal_moves()):
+            self.make_move(symbol - arcade.key.KEY_1)
+        if (self.game.game_over and symbol == arcade.key.SPACE):
+            self.setup()
 
 player = Player('Player')
 

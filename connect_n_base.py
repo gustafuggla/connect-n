@@ -18,6 +18,7 @@ class ConnectNBase:
         self.game_over = False
         self.winner = None
         self.loser = None
+        self.winning_moves = None
     
     def get_legal_moves(self):
         return np.argwhere(self.board[0, :] == 0).flatten()
@@ -40,9 +41,11 @@ class ConnectNBase:
                 if np.sum(self.board[row, col:col+self.condition]) == self.condition:
                     self.winner = self.player_1
                     self.loser = self.player_2
+                    self.winning_moves = [(row, col+i) for i in range(self.condition)]
                 elif np.sum(self.board[row, col:col+self.condition]) == -self.condition:
                     self.winner = self.player_2
                     self.loser = self.player_1
+                    self.winning_moves = [(row, col+i) for i in range(self.condition)]
 
         # Cols
         for row in range(self.n_rows - self.condition + 1):
@@ -50,9 +53,11 @@ class ConnectNBase:
                 if np.sum(self.board[row:row+self.condition, col]) == self.condition:
                     self.winner = self.player_1
                     self.loser = self.player_2
+                    self.winning_moves = [(row+i, col) for i in range(self.condition)]
                 elif np.sum(self.board[row:row+self.condition, col]) == -self.condition:
                     self.winner = self.player_2
                     self.loser = self.player_1
+                    self.winning_moves = [(row+i, col) for i in range(self.condition)]
 
         # Diagonals \
         for row in range(self.n_rows - self.condition + 1):
@@ -62,9 +67,11 @@ class ConnectNBase:
                 if np.sum(diag) == self.condition:
                     self.winner = self.player_1
                     self.loser = self.player_2
+                    self.winning_moves = [(row+i, col+i) for i in range(self.condition)]
                 elif np.sum(diag) == -self.condition:
                     self.winner = self.player_2
                     self.loser = self.player_1
+                    self.winning_moves = [(row+i, col+i) for i in range(self.condition)]
         
         # Diagonals /
         for row in range(self.condition - 1, self.n_rows):
@@ -74,9 +81,11 @@ class ConnectNBase:
                 if np.sum(diag) == self.condition:
                     self.winner = self.player_1
                     self.loser = self.player_2
+                    self.winning_moves = [(row-i, col+i) for i in range(self.condition)]
                 elif np.sum(diag) == -self.condition:
                     self.winner = self.player_2
                     self.loser = self.player_1
+                    self.winning_moves = [(row-i, col+i) for i in range(self.condition)]
         
         if self.winner is not None:
             self.game_over = True

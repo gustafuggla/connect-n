@@ -14,6 +14,12 @@ class ConnectNGUI(arcade.Window):
             player_1.id: 'sprites/pink.png',
             player_2.id: 'sprites/blue.png'
         }
+        self.tokens_border = {
+            player_1.id: 'sprites/pink_border.png',
+            player_2.id: 'sprites/blue_border.png'
+        }
+
+        self.token_scale_factor = 1/6.5
 
     def setup(self):
         self.game.setup()
@@ -24,21 +30,26 @@ class ConnectNGUI(arcade.Window):
             self.game.check_win_condition()
         else:
             if self.game.winner is not None:
-                print(self.game.winner.name)
-            else:
-                print('Draw')
-            time.sleep(2)
-            self.setup()
+                self.highlight_winning_moves()
 
     def on_draw(self):
         self.clear()
         self.sprite_list.draw()
-    
+
+    def highlight_winning_moves(self):
+        for row, col in self.game.winning_moves:
+            x, y = self.get_token_coordinates(col, row)
+            token = arcade.Sprite(self.tokens_border[self.game.winner.id],
+                                  self.token_scale_factor)
+            token.position = (x, y)
+            self.sprite_list.append(token)
+
     def make_move(self, col: int):
         row = utils.get_row(self.game.board, col)
         self.game.board[row, col] = self.game.active_player.marker
         x, y = self.get_token_coordinates(col, row)
-        token = arcade.Sprite(self.tokens[self.game.active_player.id], 1)
+        token = arcade.Sprite(self.tokens[self.game.active_player.id],
+                              self.token_scale_factor)
         token.position = (x, y)
         self.sprite_list.append(token)
         self.game.switch_active_player()

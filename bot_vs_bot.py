@@ -25,10 +25,10 @@ class ConnectN(ConnectNGUI):
             self.game.check_win_condition()
         else:
             if self.game.winner is not None:
-                print(self.game.winner.name)
-            else:
-                print('Draw')
-            time.sleep(2)
+                self.highlight_winning_moves()
+    
+    def on_key_press(self, symbol: int, modifiers: int):
+        if (self.game.game_over and symbol == arcade.key.SPACE):
             self.setup()
 
 n_rows = 3
@@ -40,8 +40,8 @@ with open(utils.get_policy_path(1, n_rows, n_cols, condition), 'rb') as f:
 with open(utils.get_policy_path(2, n_rows, n_cols, condition), 'rb') as f:
     policy_2 = pickle.load(f)
 
-bot_1 = AgentQ('Bot1', is_training=False, policy=policy_1, epsilon=0.7)
-bot_2 = AgentQ('Bot2', is_training=False, policy=policy_2, epsilon=0.7)
+bot_1 = AgentQ('Bot1', is_training=False, policy=policy_1, epsilon=1)
+bot_2 = AgentQ('Bot2', is_training=False, policy=policy_2, epsilon=1)
 
 game = ConnectN(bot_1, bot_2, n_rows, n_cols, condition)
 game.setup()

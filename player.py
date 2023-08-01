@@ -6,3 +6,4 @@ class Player:
         self.id = uuid4()
         self.name = name
         self.is_bot=False
+        self.marker = None
